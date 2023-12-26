@@ -18,7 +18,6 @@ router.get('/expert/findall', async (req, res) => {
       "Introduce": experts[i].Introduce
     })
   }
-  console.log(experts_res);
   res.send(experts_res);
 })
 
@@ -34,7 +33,6 @@ router.get('/expert/findall-online', async (req, res) => {
       "Introduce": experts[i].Introduce
     })
   }
-  console.log(experts_res);
   res.send(experts_res);
 })
 
