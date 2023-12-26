@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 //导入专家表
 const Expert = require('./Expert')
+const { Reservation } = require('./Reservation')
 
 router.use(express.json())
 
@@ -40,6 +41,22 @@ router.get('/expert/findall-online', async (req, res) => {
 router.get('/expert/find/:id', async (req, res) => {
   let experts = await Expert.find({ ID: req.params.id });
   res.send(experts);
+})
+
+router.post('/reservation/add', async (req, res) => {
+  console.log('12334')
+  let str = req.body
+  console.log(str)
+
+  try {
+    // 使用 async/await 处理保存操作
+    const result = await Reservation.create(str);
+    console.log('保存成功', result);
+    res.send('保存成功');
+  } catch (err) {
+    console.error('保存失败', err);
+    res.send('保存失败');
+  }
 })
 
 module.exports = router
