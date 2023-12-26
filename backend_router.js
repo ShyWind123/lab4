@@ -2,7 +2,10 @@ const express = require('express')
 const router = express.Router()
 //导入专家表
 const Expert = require('./Expert')
-const { Reservation } = require('./Reservation')
+//导入预约表
+const Reservation = require('./Reservation')
+//导入问题表
+const Question = require('./Question')
 
 router.use(express.json())
 
@@ -43,6 +46,7 @@ router.get('/expert/find/:id', async (req, res) => {
   res.send(experts);
 })
 
+//保存预约信息
 router.post('/reservation/add', async (req, res) => {
   console.log('12334')
   let str = req.body
@@ -57,6 +61,34 @@ router.post('/reservation/add', async (req, res) => {
     console.error('保存失败', err);
     res.send('保存失败');
   }
+})
+
+//查询所有专家
+router.get('/question/get-random', async (req, res) => {
+  let questions_res = [];
+  const questions = await Question.find();
+  const count = questions.length;
+  // const count = 20;
+  let isSelected = [];
+  for (let i = 1; i <= count; i++) {
+    isSelected.push(false);
+  }
+  for (let i = 0; i < count / 2; i++) {
+    let idx = Math.floor(Math.random() * count) + 1
+    while (isSelected[idx]) {
+      idx = Math.floor(Math.random() * count) + 1
+    }
+    isSelected[idx] = true;
+    questions_res.push({
+      "ID": questions[idx - 1].ID,
+      "Content": questions[idx - 1].Content,
+      "OptionA": questions[idx - 1].OptionA,
+      "OptionB": questions[idx - 1].OptionB,
+      "OptionC": questions[idx - 1].OptionC,
+      "OptionD": questions[idx - 1].OptionD,
+    });
+  }
+  res.send(questions_res);
 })
 
 module.exports = router

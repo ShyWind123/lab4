@@ -7,4 +7,4 @@ const reservation = new mongoose.Schema({
     Expert: String
 })
 const Reservation = mongoose.model('Reservation', reservation)
-module.exports = { Reservation }
+module.exports = Reservation
