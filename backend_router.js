@@ -101,7 +101,7 @@ router.post('/question/answer', async (req, res) => {
   if (data && data.answer) {
     processAnswer = data.answer.map(answer => {
       return {
-        id: answer.id,
+        id: Number(answer.id),
         ans: answer.answer
       }
     })
