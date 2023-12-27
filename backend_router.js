@@ -48,7 +48,6 @@ router.get('/expert/find/:id', async (req, res) => {
 
 //保存预约信息
 router.post('/reservation/add', async (req, res) => {
-  console.log('12334')
   let str = req.body
   console.log(str)
 
@@ -63,7 +62,7 @@ router.post('/reservation/add', async (req, res) => {
   }
 })
 
-//查询所有专家
+//获取随机问题
 router.get('/question/get-random', async (req, res) => {
   let questions_res = [];
   const questions = await Question.find();
@@ -89,6 +88,38 @@ router.get('/question/get-random', async (req, res) => {
     });
   }
   res.send(questions_res);
+})
+
+//得到分数
+router.post('/question/answer', async (req, res) => {
+  console.log('进入了answer分析')
+  let data = req.body
+
+  console.log(data)
+  //遍历answer字段，读取回答信息并封装
+  let processAnswer
+  if (data && data.answer) {
+    processAnswer = data.answer.map(answer => {
+      return {
+        id: answer.id,
+        ans: answer.answer
+      }
+    })
+  } else {
+    res.send('数据错误')
+  }
+  let score = 0
+  //数据库操作
+  //遍历后端存的答案数组
+  for (const answer of processAnswer) {
+    //用id查询问题信息并返回
+    const question = await Question.findOne({ ID: answer.id })
+    //比对答案
+    if (question && answer.ans == question.RightAnswer) {
+      score += 10
+    }
+  }
+  res.status(200).json({ score })
 })
 
 module.exports = router
